@@ -7,6 +7,32 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.joanna.fin.MainActivity">
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <include layout="@layout/content_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/gridview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnWidth="90dp"
+            android:numColumns="2"
+            android:paddingTop="20dp"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="10dp"
+            android:stretchMode="columnWidth"
+            android:gravity="center" />
+
+    </LinearLayout>
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,14 +47,25 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_dialog_email" />
+        android:src="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>
+
+<!--<GridView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:id="@+id/gridview"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:columnWidth="90dp"-->
+<!--android:numColumns="auto_fit"-->
+<!--android:verticalSpacing="10dp"-->
+<!--android:horizontalSpacing="10dp"-->
+<!--android:stretchMode="columnWidth"-->
+<!--android:gravity="center"-->
+
+<!--/>-->
