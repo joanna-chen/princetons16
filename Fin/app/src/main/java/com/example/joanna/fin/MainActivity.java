@@ -12,6 +12,7 @@ import android.widget.GridView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Toast;
+import android.content.Intent;
 
 import com.android.photos.views.HeaderGridView;
 
@@ -23,12 +24,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        GridView gridview = (GridView) findViewById(R.id.gridview);
+        final GridView gridview = (GridView) findViewById(R.id.gridview);
         gridview.setAdapter(new ImageAdapter(this));
 
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                sendMessage(gridview);
             }
         });
 
@@ -64,5 +66,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void sendMessage(View view) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
     }
 }
