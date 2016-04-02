@@ -20,15 +20,6 @@ public class DetailActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(new ImageAdapter(this));
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
 }
