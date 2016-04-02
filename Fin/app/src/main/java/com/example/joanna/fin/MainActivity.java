@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
 //                android.R.layout.simple_list_item_1, stringList/*typeSet.toArray(new String[typeSet.size()])*/);
 //        gridview.setAdapter(adapter);
 
-        gridview.setOnItemClickListener(new OnItemClickListener() {
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-                sendMessage(gridview, parent, position);
+                sendMessage(gridview, parent, position, id);
             }
         });
 
@@ -139,11 +139,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage(View view, AdapterView<?> parent, long id) {
+    public void sendMessage(View view, AdapterView<?> parent, int position, long id) {
         Intent intent = new Intent(this, DetailActivity.class);
         Bundle bundle = new Bundle();
         intent.putExtra("map", typeMap);
-        intent.putExtra("key", id);
+        intent.putExtra("key", (String) parent.getItemAtPosition(position));
+//        Log.v("bloop", parent.getSelectedItem().getClass().getName());
         Log.v("extra", id + "");
         startActivity(intent);
     }

@@ -27,7 +27,7 @@ public class DetailActivity extends AppCompatActivity{
     private TaskAdapter adapter;
     public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities";
     private static HashMap<String, ArrayList<Task>> hashMap;
-    private static Long key;
+    private static String key;
     private static ListView listView;
 
     @Override
@@ -45,7 +45,7 @@ public class DetailActivity extends AppCompatActivity{
         listView.setAdapter(new ImageAdapter(this));
 
         Intent intent = getIntent();
-        key = (Long)intent.getSerializableExtra("key");
+        key = (String)intent.getSerializableExtra("key");
         hashMap = (HashMap<String, ArrayList<Task>>)intent.getSerializableExtra("map");
 //        Log.v("HashMapTest", hashMap.get(key.intValue()).toString());
         updateAdapter();
@@ -69,7 +69,7 @@ public class DetailActivity extends AppCompatActivity{
     }
 
     private void updateAdapter() {
-        adapter = new TaskAdapter(this, hashMap.get("Living"));
+        adapter = new TaskAdapter(this, hashMap.get(key));
         listView.setAdapter(adapter);
     }
 
