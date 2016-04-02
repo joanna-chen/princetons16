@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ListView;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -15,6 +16,10 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final ListView listView = (ListView) findViewById(R.id.listview);
+        listView.setAdapter(new ImageAdapter(this));
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
