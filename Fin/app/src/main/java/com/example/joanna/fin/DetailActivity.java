@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.firebase.client.DataSnapshot;
@@ -29,6 +31,8 @@ public class DetailActivity extends AppCompatActivity{
     private static HashMap<String, ArrayList<Task>> hashMap;
     private static String key;
     private static ListView listView;
+    private View.OnClickListener imgButtonHandler;
+    private ImageButton imgButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,9 @@ public class DetailActivity extends AppCompatActivity{
 
         Firebase.setAndroidContext(this);
         Firebase myFirebaseRef = new Firebase(FIREBASE);
+
+//        imgButton = (ImageButton) findViewById(R.id.startstop);
+//        imgButton.setOnClickListener(imgButtonHandler);
 
         setContentView(R.layout.activity_detail2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -64,11 +71,16 @@ public class DetailActivity extends AppCompatActivity{
 //
 //        });
 
-
-
     }
 
-    private void updateAdapter() {
+//    View.OnClickListener imgButtonHandler = new View.OnClickListener() {
+
+//        public void onClick(View v) {
+//            imgButton.setImageDrawable(R.drawable.ic_media_pause);
+//        }
+//    });
+
+        private void updateAdapter() {
         adapter = new TaskAdapter(this, hashMap.get(key));
         listView.setAdapter(adapter);
     }
