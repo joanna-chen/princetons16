@@ -1,4 +1,5 @@
 package com.example.joanna.fin;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -35,7 +36,7 @@ import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/activities";
+    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities";
     private static String[] stringList = {"abc", "ahh", "joanna"};
     private HashSet<String> typeSet;
     private HashSet<Type> typeSetObj;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-                sendMessage(gridview);
+                sendMessage(gridview, parent, position);
             }
         });
 
@@ -136,8 +137,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage(View view) {
+    public void sendMessage(View view, AdapterView<?> parent, int position) {
         Intent intent = new Intent(this, DetailActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra("map", typeMap);
+        intent.putExtra("tasks", parent.getSelectedItem().toString());
+        Log.v("extra", parent.getSelectedItem().toString());
         startActivity(intent);
     }
 
