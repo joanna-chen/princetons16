@@ -14,6 +14,23 @@ public class Task implements Parcelable {
     public Task(String name) {
         this.name = name;
     }
+
+    protected Task(Parcel in) {
+        name = in.readString();
+    }
+
+    public static final Creator<Task> CREATOR = new Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
+
     public String getName() {
         return name;
     }
@@ -31,6 +48,6 @@ public class Task implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(name);
     }
 }

@@ -40,14 +40,14 @@ public class DetailActivity extends AppCompatActivity{
         listView.setAdapter(new ImageAdapter(this));
 
         Intent intent = getIntent();
-        final Long tasks = (Long)intent.getSerializableExtra("tasks");
+        final Long key = (Long)intent.getSerializableExtra("key");
         HashMap<String, Vector<Task>> hashMap = (HashMap<String, Vector<Task>>)intent.getSerializableExtra("map");
-        Log.v("HashMapTest", tasks.toString());
+        Log.v("HashMapTest", key.toString());
 
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.v("vector?", snapshot.child(tasks.toString()).toString());
+                Log.v("vector?", snapshot.child(key.toString()).toString());
             }
 
             @Override
@@ -57,8 +57,8 @@ public class DetailActivity extends AppCompatActivity{
 
         });
 
-//        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, hashMap.get("key"));
-//                listView.setAdapter(adapter);
+//        adapter = new TaskAdapter(this, hashMap.get(findViewById(R.id.key));
+//        listView.setAdapter(adapter);
 
     }
 
