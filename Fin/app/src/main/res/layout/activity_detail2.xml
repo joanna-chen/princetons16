@@ -7,6 +7,13 @@
     android:fitsSystemWindows="true"
     tools:context="com.example.joanna.fin.DetailActivity">
 
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="80dp"
+        android:verticalSpacing="10dp"
+    />
 
 
     <android.support.design.widget.AppBarLayout
@@ -22,14 +29,6 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <ListView
-        android:id="@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="60dp"
-        android:verticalSpacing="10dp"
-        />
 
     <include layout="@layout/content_detail" />
 
