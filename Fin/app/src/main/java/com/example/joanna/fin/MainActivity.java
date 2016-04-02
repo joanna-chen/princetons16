@@ -1,4 +1,5 @@
 package com.example.joanna.fin;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -25,7 +26,9 @@ import com.firebase.client.ValueEventListener;
 
 import com.firebase.client.Firebase;
 
+import java.lang.reflect.Array;
 import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -35,13 +38,13 @@ import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/activities";
+    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/";
     private static String[] stringList = {"abc", "ahh", "joanna"};
     private HashSet<String> typeSet;
     private HashSet<Type> typeSetObj;
     private ArrayAdapter<String> adapter;
     private GridView gridview;
-    private Hashtable<String, Vector<Task>> typeMap;
+    private Hashtable<String, ArrayList<Task>> typeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         typeSet = new HashSet<>();
         typeSetObj = new HashSet<>();
-        typeMap = new Hashtable<String, Vector<Task>>();
+        typeMap = new Hashtable<String, ArrayList<Task>>();
 
 
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     if (typeMap.containsKey(newType)) {
                         typeMap.get(newType).add(newTask);
                     } else {
-                        typeMap.put(newType, new Vector<Task>());
+                        typeMap.put(newType, new ArrayList<Task>());
                         typeMap.get(newType).add(newTask);
                     }
 //                    if (!typeSet.contains(newType)) {
@@ -95,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
 //                android.R.layout.simple_list_item_1, stringList/*typeSet.toArray(new String[typeSet.size()])*/);
 //        gridview.setAdapter(adapter);
 
-        gridview.setOnItemClickListener(new OnItemClickListener() {
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
-                sendMessage(gridview);
+                sendMessage(gridview, parent, position, id);
             }
         });
 
@@ -136,8 +139,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void sendMessage(View view) {
+    public void sendMessage(View view, AdapterView<?> parent, int position, long id) {
         Intent intent = new Intent(this, DetailActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtra("map", typeMap);
+        intent.putExtra("key", (String) parent.getItemAtPosition(position));
+//        Log.v("bloop", parent.getSelectedItem().getClass().getName());
+        Log.v("extra", id + "");
         startActivity(intent);
     }
 
