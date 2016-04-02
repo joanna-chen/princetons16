@@ -35,7 +35,7 @@ import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/activities";
+    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/";
     private static String[] stringList = {"abc", "ahh", "joanna"};
     private HashSet<String> typeSet;
     private HashSet<Type> typeSetObj;
