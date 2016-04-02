@@ -26,17 +26,22 @@ import com.firebase.client.ValueEventListener;
 import com.firebase.client.Firebase;
 
 import java.util.AbstractSet;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/activities";
     private static String[] stringList = {"abc", "ahh", "joanna"};
     private HashSet<String> typeSet;
+    private HashSet<Type> typeSetObj;
     private ArrayAdapter<String> adapter;
     private GridView gridview;
+    private Hashtable<String, Vector<Task>> typeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,14 +55,32 @@ public class MainActivity extends AppCompatActivity {
         gridview = (GridView) findViewById(R.id.gridview);
 
         typeSet = new HashSet<>();
+        typeSetObj = new HashSet<>();
+        typeMap = new Hashtable<String, Vector<Task>>();
+
 
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Log.v("there are ", snapshot.getChildrenCount() + " children");
+
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    typeSet.add(postSnapshot.child("type").getValue().toString());
-                    Log.v(postSnapshot.child("type").toString(), "added");
+                    String newType = postSnapshot.child("type").getValue().toString();
+                    Task newTask = new Task(postSnapshot.child("name").getValue().toString());
+                    if (typeMap.containsKey(newType)) {
+                        typeMap.get(newType).add(newTask);
+                    } else {
+                        typeMap.put(newType, new Vector<Task>());
+                        typeMap.get(newType).add(newTask);
+                    }
+//                    if (!typeSet.contains(newType)) {
+//                        typeSet.add(newType);
+//                        typeSetObj.add(new Type(newType));
+//                        typeMap.put(newType, first.add(new Task(postSnapshot.child("name").getValue().toString())));
+//                    }
+
+                    Log.v(newType, "added");
+
                 }
                 updateAdapter();
             }
@@ -120,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateAdapter() {
         adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, typeSet.toArray(new String[typeSet.size()]));
+                android.R.layout.simple_list_item_1, typeMap.keySet().toArray(new String[typeSet.size()]));
         gridview.setAdapter(adapter);
     }
 }
