@@ -18,12 +18,16 @@ import com.firebase.client.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 public class DetailActivity extends AppCompatActivity{
 
-    private ArrayAdapter<String> adapter;
+    private TaskAdapter adapter;
     public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities";
+    private static HashMap<String, Vector<Task>> hashMap;
+    private static Long key;
+    private static ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,30 +40,36 @@ public class DetailActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        ListView listView = (ListView) findViewById(R.id.listview);
+        listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(new ImageAdapter(this));
 
         Intent intent = getIntent();
-        final Long key = (Long)intent.getSerializableExtra("key");
-        HashMap<String, Vector<Task>> hashMap = (HashMap<String, Vector<Task>>)intent.getSerializableExtra("map");
-        Log.v("HashMapTest", key.toString());
+        key = (Long)intent.getSerializableExtra("key");
+        hashMap = (HashMap<String, Vector<Task>>)intent.getSerializableExtra("map");
+        Log.v("HashMapTest", hashMap.get(key.intValue()).toString());
+        updateAdapter();
 
-        myFirebaseRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                Log.v("vector?", snapshot.child(key.toString()).toString());
-            }
+//        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot snapshot) {
+//                //Log.v("vector?", hashMap.get(key.intValue()).toString());
+//                updateAdapter();
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//                System.out.println("The read failed: " + firebaseError.getMessage());
+//            }
+//
+//        });
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
 
-        });
 
-//        adapter = new TaskAdapter(this, hashMap.get(findViewById(R.id.key));
-//        listView.setAdapter(adapter);
+    }
 
+    private void updateAdapter() {
+        adapter = new TaskAdapter(this, hashMap.get(key.intValue()));
+        listView.setAdapter(adapter);
     }
 
 
