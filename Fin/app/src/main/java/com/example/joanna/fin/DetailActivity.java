@@ -49,7 +49,7 @@ public class DetailActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
 
         listView = (ListView) findViewById(R.id.listview);
-        listView.setAdapter(new ImageAdapter(this));
+        //listView.setAdapter(new ImageAdapter(this));
 
         Intent intent = getIntent();
         key = (String)intent.getSerializableExtra("key");

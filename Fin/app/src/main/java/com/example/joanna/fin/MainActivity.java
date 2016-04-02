@@ -1,4 +1,7 @@
 package com.example.joanna.fin;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -7,14 +10,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.content.Intent;
 import com.firebase.client.AuthData;
@@ -33,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
@@ -45,12 +53,16 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private GridView gridview;
     private Hashtable<String, ArrayList<Task>> typeMap;
+    private String addActivityName;
+    private String addCategoryName;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         Firebase.setAndroidContext(this);
-        Firebase myFirebaseRef = new Firebase(FIREBASE);
+        final Firebase myFirebaseRef = new Firebase(FIREBASE);
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         typeSet = new HashSet<>();
         typeSetObj = new HashSet<>();
         typeMap = new Hashtable<String, ArrayList<Task>>();
+
+        addActivityName = "";
+        addCategoryName = "";
 
 
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -107,12 +122,53 @@ public class MainActivity extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener()
-
         {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                LinearLayout layout = new LinearLayout(context);
+                layout.setOrientation(LinearLayout.VERTICAL);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("New Activity");
+
+                // Set up the input
+                final EditText input_activity = new EditText(context);
+                final EditText input_category = new EditText(context);
+                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+                //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                input_activity.setInputType(InputType.TYPE_CLASS_TEXT);
+                input_activity.setHint(Html.fromHtml("<small style=\"text-color: gray;\"><i>" + "Activity" + "</i></small>"));
+                input_category.setInputType(InputType.TYPE_CLASS_TEXT);
+                input_category.setHint(Html.fromHtml("<small style=\"text-color: gray;\"><i>" + "Category" + "</i></small>"));
+                // add to layout
+                layout.addView(input_activity);
+                layout.addView(input_category);
+                // add to builder
+                builder.setView(layout);
+
+                // Set up the buttons
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addActivityName = input_activity.getText().toString();
+                        addCategoryName = input_category.getText().toString();
+                        // add to firebase
+                        Map<String, String> post1 = new HashMap<String, String>();
+                        post1.put("name", addActivityName);
+                        post1.put("type", addCategoryName);
+                        myFirebaseRef.push().setValue(post1);
+                        Log.v(addActivityName, addCategoryName);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.show();
             }
         });
     }
