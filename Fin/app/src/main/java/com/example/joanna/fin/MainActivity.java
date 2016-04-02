@@ -25,10 +25,18 @@ import com.firebase.client.ValueEventListener;
 
 import com.firebase.client.Firebase;
 
+import java.util.AbstractSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 public class MainActivity extends AppCompatActivity {
 
-    public static final String FIREBASE = "https://fintime.firebaseio.com/";
+    public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/activities";
     private static String[] stringList = {"abc", "ahh", "joanna"};
+    private HashSet<String> typeSet;
+    private ArrayAdapter<String> adapter;
+    private GridView gridview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,21 +47,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        final GridView gridview = (GridView) findViewById(R.id.gridview);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, stringList);
-        gridview.setAdapter(adapter);
+        gridview = (GridView) findViewById(R.id.gridview);
+
+        typeSet = new HashSet<>();
 
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                Log.v("value:", snapshot.getValue().toString());
+                Log.v("there are ", snapshot.getChildrenCount() + " children");
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    typeSet.add(postSnapshot.child("type").getValue().toString());
+                    Log.v(postSnapshot.child("type").toString(), "added");
+                }
+                updateAdapter();
             }
+
             @Override
             public void onCancelled(FirebaseError firebaseError) {
                 System.out.println("The read failed: " + firebaseError.getMessage());
             }
         });
+
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+//                android.R.layout.simple_list_item_1, stringList/*typeSet.toArray(new String[typeSet.size()])*/);
+//        gridview.setAdapter(adapter);
 
         gridview.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
@@ -99,5 +116,11 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage(View view) {
         Intent intent = new Intent(this, DetailActivity.class);
         startActivity(intent);
+    }
+
+    public void updateAdapter() {
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, typeSet.toArray(new String[typeSet.size()]));
+        gridview.setAdapter(adapter);
     }
 }
