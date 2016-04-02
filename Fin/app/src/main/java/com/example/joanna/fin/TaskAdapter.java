@@ -17,9 +17,9 @@ import java.util.Vector;
  */
 public class TaskAdapter extends BaseAdapter {
     private Context context;
-    private Vector<Task> task;
+    private ArrayList<Task> task;
 
-    public TaskAdapter(Context context, Vector<Task> task) {
+    public TaskAdapter(Context context, ArrayList<Task> task) {
         this.context = context;
         this.task = task;
     }

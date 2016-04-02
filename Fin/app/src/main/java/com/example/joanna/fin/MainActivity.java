@@ -26,7 +26,9 @@ import com.firebase.client.ValueEventListener;
 
 import com.firebase.client.Firebase;
 
+import java.lang.reflect.Array;
 import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private HashSet<Type> typeSetObj;
     private ArrayAdapter<String> adapter;
     private GridView gridview;
-    private Hashtable<String, Vector<Task>> typeMap;
+    private Hashtable<String, ArrayList<Task>> typeMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         typeSet = new HashSet<>();
         typeSetObj = new HashSet<>();
-        typeMap = new Hashtable<String, Vector<Task>>();
+        typeMap = new Hashtable<String, ArrayList<Task>>();
 
 
         myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     if (typeMap.containsKey(newType)) {
                         typeMap.get(newType).add(newTask);
                     } else {
-                        typeMap.put(newType, new Vector<Task>());
+                        typeMap.put(newType, new ArrayList<Task>());
                         typeMap.get(newType).add(newTask);
                     }
 //                    if (!typeSet.contains(newType)) {

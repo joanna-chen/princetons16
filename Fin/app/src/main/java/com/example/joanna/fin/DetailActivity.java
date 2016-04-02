@@ -17,6 +17,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -25,7 +26,7 @@ public class DetailActivity extends AppCompatActivity{
 
     private TaskAdapter adapter;
     public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities";
-    private static HashMap<String, Vector<Task>> hashMap;
+    private static HashMap<String, ArrayList<Task>> hashMap;
     private static Long key;
     private static ListView listView;
 
@@ -45,8 +46,8 @@ public class DetailActivity extends AppCompatActivity{
 
         Intent intent = getIntent();
         key = (Long)intent.getSerializableExtra("key");
-        hashMap = (HashMap<String, Vector<Task>>)intent.getSerializableExtra("map");
-        Log.v("HashMapTest", hashMap.get(key.intValue()).toString());
+        hashMap = (HashMap<String, ArrayList<Task>>)intent.getSerializableExtra("map");
+//        Log.v("HashMapTest", hashMap.get(key.intValue()).toString());
         updateAdapter();
 
 //        myFirebaseRef.addValueEventListener(new ValueEventListener() {
@@ -68,7 +69,7 @@ public class DetailActivity extends AppCompatActivity{
     }
 
     private void updateAdapter() {
-        adapter = new TaskAdapter(this, hashMap.get(key.intValue()));
+        adapter = new TaskAdapter(this, hashMap.get("Living"));
         listView.setAdapter(adapter);
     }
 
