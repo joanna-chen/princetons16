@@ -2,6 +2,7 @@ package com.example.joanna.fin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,12 @@ import java.util.ArrayList;
 public class TypeAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<String> type;
+    private Typeface mainFont = null;
 
     public TypeAdapter(Context context, ArrayList<String> type) {
         this.context = context;
         this.type = type;
+        mainFont = Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Regular.ttf");
     }
 
     private class ViewHolder {
@@ -47,6 +50,7 @@ public class TypeAdapter extends BaseAdapter {
 
         // set data
         holder.typeName.setText(type.get(position));
+        holder.typeName.setTypeface(mainFont);
         //holder.typeName.setTag();
 
         // Return the completed view to render on screen

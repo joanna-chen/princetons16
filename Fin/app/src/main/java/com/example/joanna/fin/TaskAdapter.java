@@ -2,6 +2,7 @@ package com.example.joanna.fin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,15 +24,17 @@ import java.util.Vector;
 public class TaskAdapter extends BaseAdapter {
     private final Context context;
     private ArrayList<Task> task;
+    private Typeface mainFont = null;
 
     public TaskAdapter(Context context, ArrayList<Task> task) {
         this.context = context;
         this.task = task;
+        mainFont = Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Regular.ttf");
     }
 
     private class ViewHolder {
         TextView taskName;
-        ImageView progress;
+//        ImageView progress;
         ImageButton start;
         ImageButton stop;
         TextView timeElapsed;
@@ -49,7 +52,7 @@ public class TaskAdapter extends BaseAdapter {
             convertView = mInflater.inflate(R.layout.list_item, null);
             holder = new ViewHolder();
             holder.taskName = (TextView) convertView.findViewById(R.id.task_name);
-            holder.progress = (ImageView) convertView.findViewById(R.id.progress);
+//            holder.progress = (ImageView) convertView.findViewById(R.id.progress);
             holder.start = (ImageButton) convertView.findViewById(R.id.start);
             holder.stop = (ImageButton) convertView.findViewById(R.id.stop);
             holder.timeElapsed = (TextView) convertView.findViewById(R.id.time_elapsed);
@@ -65,9 +68,11 @@ public class TaskAdapter extends BaseAdapter {
         // set data
         final Task task = (Task) getItem(position);
         holder.taskName.setText(task.getName());
-        holder.progress.setImageResource(R.drawable.sample_0);
+        holder.taskName.setTypeface(mainFont);
+//        holder.progress.setImageResource(R.drawable.sample_0);
         holder.start.setImageResource(android.R.drawable.ic_media_play);
         holder.stop.setImageResource(android.R.drawable.ic_media_pause);
+        holder.timeElapsed.setTypeface(mainFont);
         // hhmmss calculations
         if (task.getRunning()) {
             long diff = System.currentTimeMillis() / 1000 - task.getStart();

@@ -1,12 +1,13 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material">
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
-        <item name="android:colorPrimaryDark">#669999</item>
-        <item name="android:colorPrimary">#7AB8B4</item>
-        <item name="android:colorAccent">#CCD9C6</item>
-        <item name="android:textColor">#E3F0D7</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+        <item name="android:tint">@color/colorText</item>
 
     </style>
 
