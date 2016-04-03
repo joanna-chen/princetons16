@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         context = this;
         // fonts
-        mainFont = Typeface.createFromAsset(getAssets(), "fonts/Raleway-Regular.ttf");
+        mainFont = Typeface.createFromAsset(getAssets(), "fonts/Raleway-SemiBold.ttf");
         fancyFont= Typeface.createFromAsset(this.getAssets(), "fonts/MeriendaOne-Regular.ttf");
         running = new ArrayList<RunningTask>();
         // firebase
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        toolbar.setBackgroundResource(R.color.colorTextDark);
         gridview = (GridView) findViewById(R.id.gridview);
 
         // Set up ViewPager and its adapter
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        boolean isConnected = PebbleKit.isWatchConnected(this);
+//        boolean isConnected = PebbleKit.isWatchConnected(this);
 //        Toast.makeText(this, "Pebble " + (isConnected ? "is" : "is not") + " connected!", Toast.LENGTH_LONG).show();
 /////////////////////////////////////// pebble dictionary
 //        // Create a new dictionary
@@ -317,27 +318,27 @@ public class MainActivity extends AppCompatActivity {
 //        PebbleKit.registerReceivedDataHandler(this, mReceiver);
 //    }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public void sendMessage(View view, AdapterView<?> parent, int position, long id) {
         Intent intent = new Intent(this, DetailActivity.class);

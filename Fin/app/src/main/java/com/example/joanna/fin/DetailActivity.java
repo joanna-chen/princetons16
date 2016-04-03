@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -45,8 +46,8 @@ public class DetailActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_detail2);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+//        tv_ins.setTypeface(tf);
 //        getSupportActionBar().setTitle((CharSequence) hashMap.get(key));
 
         listView = (ListView) findViewById(R.id.listview);
@@ -57,6 +58,12 @@ public class DetailActivity extends AppCompatActivity {
         hashMap = (HashMap<String, ArrayList<Task>>) intent.getSerializableExtra("map");
 //        Log.v("HashMapTest", hashMap.get(key.intValue()).toString());
         updateAdapter();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+//        toolbar.setBackgroundResource(R.color.colorTextDark);
+//        TextView tv_ins = (TextView) findViewById(R.id.toolbar_title);
+//        tv_ins.setText(key);
 
         Thread t = new Thread() {
             @Override

@@ -17,10 +17,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="22dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:textSize="20dp"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorTextDark"
             android:background="@color/colorAccentDark"/>
 
         <!--<ImageView-->
@@ -65,8 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@id/buttons"
         android:paddingRight="5dp"
-        android:paddingTop="10dp"
-        android:textSize="12dp"
-        android:textColor="@color/colorText"
+        android:paddingTop="14dp"
+        android:textSize="16dp"
+        android:textColor="@color/colorTextDark"
         android:background="@color/colorAccentDark"/>
 </RelativeLayout>

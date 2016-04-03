@@ -4,4 +4,10 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="image">Image here</string>
     <string name="activity_name">Activity Name</string>
+
+    <string name="icon_heart">&#xf004;</string>
+    <string name="icon_ball">&#xf1e3;</string>
+    <string name="icon_book">&#xf02d;</string>
+    <string name="icon_entertainment">&#xf26c;</string>
+
 </resources>

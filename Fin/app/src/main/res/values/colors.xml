@@ -5,4 +5,8 @@
     <color name="colorAccentDark">#AFCDBF</color>
     <color name="colorAccent">#CCD9C6</color>
     <color name="colorText">#E3F0D7</color>
+    <color name="colorTextDark">#666666</color>
+    <color name="green2">#AACCB1</color>
+    <color name="green3">#C3DBB4</color>
+    <color name="green1">#D3E2B6</color>
 </resources>

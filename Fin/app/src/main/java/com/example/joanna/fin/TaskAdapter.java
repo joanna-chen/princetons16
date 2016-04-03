@@ -29,7 +29,7 @@ public class TaskAdapter extends BaseAdapter {
     public TaskAdapter(Context context, ArrayList<Task> task) {
         this.context = context;
         this.task = task;
-        mainFont = Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-Regular.ttf");
+        mainFont = Typeface.createFromAsset(context.getAssets(), "fonts/Raleway-SemiBold.ttf");
     }
 
     private class ViewHolder {
@@ -70,11 +70,15 @@ public class TaskAdapter extends BaseAdapter {
         holder.taskName.setText(task.getName());
         holder.taskName.setTypeface(mainFont);
 //        holder.progress.setImageResource(R.drawable.sample_0);
-        holder.start.setImageResource(android.R.drawable.ic_media_play);
-        holder.stop.setImageResource(android.R.drawable.ic_media_pause);
+//        holder.start.setImageResource(android.R.drawable.ic_media_play);
+//        holder.stop.setImageResource(android.R.drawable.ic_media_pause);
+        holder.start.setImageResource(R.mipmap.ic_play_outline);
+        holder.stop.setImageResource(R.mipmap.ic_pause_filled);
         holder.timeElapsed.setTypeface(mainFont);
         // hhmmss calculations
         if (task.getRunning()) {
+            holder.start.setImageResource(R.mipmap.ic_play_filled);
+            holder.stop.setImageResource(R.mipmap.ic_pause_outline);
             long diff = System.currentTimeMillis() / 1000 - task.getStart();
             long hr = diff / 3600;
             long rem = diff % 3600;
@@ -85,6 +89,8 @@ public class TaskAdapter extends BaseAdapter {
             String secStr = (sec<10 ? "0" : "")+sec;
             holder.timeElapsed.setText(hrStr + ":" + mnStr + ":" + secStr);
         } else {
+            holder.start.setImageResource(R.mipmap.ic_play_outline);
+            holder.stop.setImageResource(R.mipmap.ic_pause_filled);
             holder.timeElapsed.setText("");
         }
 
