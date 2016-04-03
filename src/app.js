@@ -44,12 +44,11 @@ main.show();
 
 main.on('click', 'down', function(e) {
   var card = new UI.Card();
-  var pressed = 'false'; 
   card.title('School'); //type of activity
   card.show();
   card.on('click', 'select', function(e) {
     var menu = new UI.Menu({
-      backgroundColor: 'green',
+      backgroundColor: 'red',
       sections: [{
         items: [{
           title: 'Commute', // need indication of started and stop
@@ -59,17 +58,21 @@ main.on('click', 'down', function(e) {
           title: 'Calculus', // need indication of started and stop
 //           icon: 'math',
           subtitle: '45:00'
+        }, {
+          title: 'Biology',
+          subtitle: '20:00'
         }]
       }]   
     });
+    var pressed = false; 
     menu.on('select', function(e) {
-      if (pressed == 'false') {
-        menu.backgroundColor = 'green' ;
-        pressed = true;
+      if (pressed === true) {
+        menu.backgroundColor('red') ;
+        pressed = false;
         // send start and stop times 
       } else { 
-        menu.backgroundColor = 'red';
-        pressed = false;
+        menu.backgroundColor('green');
+        pressed = true;
       } 
     });
     menu.show();
@@ -96,16 +99,17 @@ main.on('click', 'up', function(e) {
       }]   
     });
         ///////////////////
-//     menu.on('select', function(e) {
-//       if (!pressed) {
-//         e.item.title.color(0xAAFFAA);
-//         pressed = true;
-//         // send start and stop times 
-//       } else { 
-//         e.item.title.color(0xFF5555);
-//         pressed = false;
-//       } 
-//     });
+    var pressed = false; 
+    menu.on('select', function(e) {
+      if (pressed === true) {
+        menu.backgroundColor('red') ;
+        pressed = false;
+        // send start and stop times 
+      } else { 
+        menu.backgroundColor('green');
+        pressed = true;
+      } 
+    });
     menu.show();
   });
 });
