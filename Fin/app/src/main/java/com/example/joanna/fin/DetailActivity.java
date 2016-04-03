@@ -32,7 +32,7 @@ public class DetailActivity extends AppCompatActivity{
     private static String key;
     private static ListView listView;
     private View.OnClickListener imgButtonHandler;
-    private ImageButton imgButton;
+    private static boolean pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,21 +41,21 @@ public class DetailActivity extends AppCompatActivity{
         Firebase.setAndroidContext(this);
         Firebase myFirebaseRef = new Firebase(FIREBASE);
 
-//        imgButton = (ImageButton) findViewById(R.id.startstop);
-//        imgButton.setOnClickListener(imgButtonHandler);
 
         setContentView(R.layout.activity_detail2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        getSupportActionBar().setTitle((CharSequence) hashMap.get(key));
 
         listView = (ListView) findViewById(R.id.listview);
         //listView.setAdapter(new ImageAdapter(this));
 
         Intent intent = getIntent();
-        key = (String)intent.getSerializableExtra("key");
-        hashMap = (HashMap<String, ArrayList<Task>>)intent.getSerializableExtra("map");
+        key = (String) intent.getSerializableExtra("key");
+        hashMap = (HashMap<String, ArrayList<Task>>) intent.getSerializableExtra("map");
 //        Log.v("HashMapTest", hashMap.get(key.intValue()).toString());
         updateAdapter();
+    }
 
 //        myFirebaseRef.addValueEventListener(new ValueEventListener() {
 //            @Override
@@ -71,14 +71,20 @@ public class DetailActivity extends AppCompatActivity{
 //
 //        });
 
-    }
+//    }
 
-//    View.OnClickListener imgButtonHandler = new View.OnClickListener() {
+//    ImageButton.OnClickListener imgButtonHandler = new View.OnClickListener()
 
-//        public void onClick(View v) {
-//            imgButton.setImageDrawable(R.drawable.ic_media_pause);
+//    ImageButton imgButton = (ImageButton) findViewById(R.id.startstop);
+//    imgButton.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//            if (!pressed){
+//                imgButton.setImageDrawable(R.drawable.ic_media_pause);
+//            } else{
+//            }
 //        }
-//    });
+//    }
 
         private void updateAdapter() {
         adapter = new TaskAdapter(this, hashMap.get(key));

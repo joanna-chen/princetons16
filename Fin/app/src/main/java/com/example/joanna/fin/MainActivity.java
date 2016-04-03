@@ -2,7 +2,9 @@ package com.example.joanna.fin;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.os.Parcelable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -32,6 +34,9 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import com.firebase.client.Firebase;
+import com.getpebble.android.kit.Constants;
+import com.getpebble.android.kit.PebbleKit;
+import com.getpebble.android.kit.util.PebbleDictionary;
 
 import java.lang.reflect.Array;
 import java.util.AbstractSet;
@@ -56,6 +61,47 @@ public class MainActivity extends AppCompatActivity {
     private String addActivityName;
     private String addCategoryName;
     private Context context;
+    private Handler mHandler = new Handler();
+    private PebbleKit.PebbleDataReceiver mReceiver;
+    private ViewPager mViewPager;
+
+            @Override
+            protected void onResume() {
+        super.onResume();
+
+        boolean isConnected = PebbleKit.isWatchConnected(this);
+        Toast.makeText(this, "Pebble " + (isConnected ? "is" : "is not") + " connected!", Toast.LENGTH_LONG).show();
+
+        // Get information back from the watchapp
+        if(mReceiver == null) {
+            mReceiver = new PebbleKit.PebbleDataReceiver(Constants.SPORTS_UUID) {
+
+                @Override
+                public void receiveData(Context context, int id, PebbleDictionary data) {
+                    // Always ACKnowledge the last message to prevent timeouts
+                    PebbleKit.sendAckToPebble(getApplicationContext(), id);
+
+                    // Get action and display
+                    int state = data.getUnsignedIntegerAsLong(Constants.SPORTS_STATE_KEY).intValue();
+                    Toast.makeText(getApplicationContext(),
+                            (state == Constants.SPORTS_STATE_PAUSED ? "Resumed!" : "Paused!"), Toast.LENGTH_SHORT).show();
+                }
+
+            };
+        }
+
+// Register the receiver to get data
+        PebbleKit.registerReceivedDataHandler(this, mReceiver);
+    }
+
+    public void run() {
+        // Send a time and distance to the sports app
+        PebbleDictionary outgoing = new PebbleDictionary();
+        outgoing.addString(Constants.SPORTS_TIME_KEY, "12:52");
+        outgoing.addString(Constants.SPORTS_DISTANCE_KEY, "23.8");
+        PebbleKit.sendDataToPebble(getApplicationContext(), Constants.SPORTS_UUID, outgoing);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         gridview = (GridView) findViewById(R.id.gridview);
+
+        // Set up ViewPager and its adapter
+//        mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
         typeSet = new HashSet<>();
         typeSetObj = new HashSet<>();
