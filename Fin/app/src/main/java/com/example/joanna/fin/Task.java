@@ -7,12 +7,36 @@ import android.os.Parcelable;
  * Created by jerry on 02/04/16.
  */
 public class Task implements Parcelable {
+    private String name;
+    private boolean running;
+    private long start;
+    private long end;
+
+    public long getStart() {
+        return start;
+    }
+
+    public void setStart(long start) {
+        this.start = start;
+    }
+
+    public long getEnd() {
+        return end;
+    }
+
+    public void setEnd(long end) {
+        this.end = end;
+    }
+
+
+
     public Task() {
 
     }
 
     public Task(String name) {
         this.name = name;
+        running = false;
     }
 
     protected Task(Parcel in) {
@@ -31,6 +55,13 @@ public class Task implements Parcelable {
         }
     };
 
+    public boolean getRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
     public String getName() {
         return name;
     }
@@ -39,7 +70,7 @@ public class Task implements Parcelable {
         this.name = name;
     }
 
-    private String name;
+
 
     @Override
     public int describeContents() {
