@@ -34,7 +34,7 @@ var UI = require('ui');
 var main = new UI.Card({
   title: 'FIN',
 //   icon: 'images/logo.png',
-  subtitle: 'Time of your life!',
+  subtitle: 'Time your life!',
   body: 'Scroll down for tasks.',
   subtitleColor: 'indigo', // Named colors
   bodyColor: '#9a0036' // Hex colors
@@ -68,14 +68,19 @@ main.on('click', 'down', function(e) {
     menu.on('select', function(e) {
       if (pressed === true) {
         menu.backgroundColor('red') ;
+        e.item.subtitle = 'Started';
         pressed = false;
         // send start and stop times 
       } else { 
         menu.backgroundColor('green');
+        e.item.subtitle = 'Ended';
         pressed = true;
-      } 
+      }
     });
     menu.show();
+  });
+  card.on('click', 'up', function(e) {
+    main.show();
   });
 });
 //////////////////
@@ -98,18 +103,22 @@ main.on('click', 'up', function(e) {
         }]
       }]   
     });
-        ///////////////////
     var pressed = false; 
     menu.on('select', function(e) {
       if (pressed === true) {
         menu.backgroundColor('red') ;
+        e.item.subtitle = 'Started';
         pressed = false;
         // send start and stop times 
       } else { 
         menu.backgroundColor('green');
+        e.item.subtitle = 'Ended';
         pressed = true;
       } 
     });
     menu.show();
   });
+  card2.on('click', 'down', function(e) {
+    main.show();
+  }
 });
