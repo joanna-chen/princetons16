@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tile_item"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="90dp">
+    android:layout_height="match_parent"
+    android:minHeight="150dp"
+    android:background="@color/colorText"
+    >
+
+    <TextView
+        android:id="@+id/type_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="18dp"
+        android:textColor="@color/colorText"
+        android:background="@color/colorPrimary"
+        android:gravity="center" />
 
 </LinearLayout>

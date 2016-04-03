@@ -38,7 +38,8 @@ public class TypeAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.tile_item, null);
             holder = new ViewHolder();
-            //holder.typeName = (TextView) convertView.findViewById(R.id.type_name);
+            holder.typeName = (TextView) convertView.findViewById(R.id.type_name);
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

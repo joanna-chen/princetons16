@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
     public static final String FIREBASE = "https://dazzling-heat-9788.firebaseio.com/activities/";
     private static String[] stringList = {"abc", "ahh", "joanna"};
     private static HashSet<String> typeSet;
+    private static HashSet<String> taskSet;
     private HashSet<Type> typeSetObj;
-    private static ArrayAdapter<String> adapter;
+//    private static ArrayAdapter<String> adapter;
+    private static TypeAdapter adapter;
     private static GridView gridview;
     private static Hashtable<String, ArrayList<Task>> typeMap;
     private String addActivityName;
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
 //        mViewPager = (ViewPager) findViewById(R.id.view_pager);
 
         typeSet = new HashSet<>();
+        taskSet = new HashSet<>();
         typeSetObj = new HashSet<>();
         typeMap = new Hashtable<String, ArrayList<Task>>();
 
@@ -109,12 +112,18 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     String newType = postSnapshot.child("type").getValue().toString();
                     Task newTask = new Task(postSnapshot.child("name").getValue().toString());
-                    if (typeMap.containsKey(newType)) {
-                        typeMap.get(newType).add(newTask);
-                    } else {
+                    // does hashmap have the key?
+                    if (!typeMap.containsKey(newType)) {
                         typeMap.put(newType, new ArrayList<Task>());
-                        typeMap.get(newType).add(newTask);
+//                        typeSet.add(newType);
                     }
+                    // add the new task
+                    // check if it already has the task
+                    if (!taskSet.contains(newTask.getName())) {
+                        typeMap.get(newType).add(newTask);
+                        taskSet.add(newTask.getName());
+                    }
+
 //                    if (!typeSet.contains(newType)) {
 //                        typeSet.add(newType);
 //                        typeSetObj.add(new Type(newType));
@@ -200,9 +209,10 @@ public class MainActivity extends AppCompatActivity {
                 final EditText input_category = new EditText(context);
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 //input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                input_activity.setInputType(InputType.TYPE_CLASS_TEXT);
+                input_activity.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                 input_activity.setHint(Html.fromHtml("<small style=\"text-color: gray;\">" + "Activity" + "</small>"));
-                input_category.setInputType(InputType.TYPE_CLASS_TEXT);
+
+                input_category.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
                 input_category.setHint(Html.fromHtml("<small style=\"text-color: gray;\">" + "Category" + "</small>"));
                 // add to layout
                 layout.addView(input_activity);
@@ -333,8 +343,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void updateAdapter() {
-        adapter = new ArrayAdapter<String>(context,
-                android.R.layout.simple_list_item_1, typeMap.keySet().toArray(new String[typeSet.size()]));
+//        adapter = new ArrayAdapter<String>(context,
+//                android.R.layout.simple_list_item_1, typeMap.keySet().toArray(new String[typeSet.size()]));
+        Log.v(typeSet.size() + "", " elements in typeset");
+        adapter = new TypeAdapter(context, new ArrayList<String>(typeMap.keySet()));
         gridview.setAdapter(adapter);
     }
 
