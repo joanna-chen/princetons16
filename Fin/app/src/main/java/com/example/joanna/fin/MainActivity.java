@@ -32,16 +32,20 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import com.firebase.client.Firebase;
+import com.getpebble.android.kit.PebbleKit;
+import com.getpebble.android.kit.util.PebbleDictionary;
 
 import java.lang.reflect.Array;
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
@@ -56,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private String addActivityName;
     private String addCategoryName;
     private Context context;
+    private static ArrayList<RunningTask> running;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 Log.v("there are ", snapshot.getChildrenCount() + " children");
-
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     String newType = postSnapshot.child("type").getValue().toString();
                     Task newTask = new Task(postSnapshot.child("name").getValue().toString());
@@ -109,6 +113,43 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        myFirebaseRef.addChildEventListener(new ChildEventListener() {
+//            // Retrieve new posts as they are added to the database
+//            @Override
+//            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
+//                String newType = snapshot.child("type").getValue().toString();
+//                Task newTask = new Task(snapshot.child("name").getValue().toString());
+//                if (typeMap.containsKey(newType)) {
+//                    typeMap.get(newType).add(newTask);
+//                } else {
+//                    typeMap.put(newType, new ArrayList<Task>());
+//                    typeMap.get(newType).add(newTask);
+//                }
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot snapshot) {
+//                Log.v("removed", "child");
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot snapshot, String string) {
+//                Log.v("changed", "child");
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot snapshot, String string) {
+//                Log.v("changed", "child");
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//                System.out.println("The read failed: " + firebaseError.getMessage());
+//            }
+//            //... ChildEventListener also defines onChildChanged, onChildRemoved,
+//            //    onChildMoved and onCanceled, covered in later sections.
+//        });
+
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 //                android.R.layout.simple_list_item_1, stringList/*typeSet.toArray(new String[typeSet.size()])*/);
 //        gridview.setAdapter(adapter);
@@ -117,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Toast.makeText(MainActivity.this, "" + position, Toast.LENGTH_SHORT).show();
                 sendMessage(gridview, parent, position, id);
+
             }
         });
 
@@ -174,6 +216,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        boolean isConnected = PebbleKit.isWatchConnected(this);
+        Toast.makeText(this, "Pebble " + (isConnected ? "is" : "is not") + " connected!", Toast.LENGTH_LONG).show();
+        // Create a new dictionary
+        PebbleDictionary dict = new PebbleDictionary();
+        // The key representing a contact name is being transmitted
+        final int AppKeyContactName = 0;
+        final int AppKeyAge = 1;
+
+        // Get data from the app
+        final String contactName = "joanna";
+        final int age = 7;
+
+        // Add data to the dictionary
+        dict.addString(AppKeyContactName, contactName);
+        dict.addInt32(AppKeyAge, age);
+
+        Log.v("before", "sending");
+        final UUID appuuid = UUID.fromString("469f68b9-5c53-4d0c-b15f-06400e491b73");
+        // send the dictionary
+        PebbleKit.sendDataToPebble(getApplicationContext(), appuuid, dict);
+        Log.v("message", "sent");
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -209,5 +278,82 @@ public class MainActivity extends AppCompatActivity {
         adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, typeMap.keySet().toArray(new String[typeSet.size()]));
         gridview.setAdapter(adapter);
+    }
+
+    public static RunningTask findInRunning(String name) {
+        for (int i = 0; i < running.size(); i++) {
+            if (running.get(i).getTask().getName().equals(name)) {
+                return running.get(i);
+            }
+        }
+        return null;
+    }
+
+    public static int findIndexInRunning(String name) {
+        for (int i = 0; i < running.size(); i++) {
+            if (running.get(i).getTask().getName().equals(name)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void startTask(Task task) {
+        RunningTask newRunning = new RunningTask(task);
+        newRunning.start();
+        running.add(newRunning);
+    }
+
+    public void endTask(final Task task) {
+        RunningTask found = findInRunning(task.getName());
+        if (found == null) return;
+        found.end();
+        final String endTime = found.getEnd() + "";
+        final String startTime = found.getStart() + "";
+
+        // put into firebase
+        final Firebase myFirebaseRef = new Firebase(FIREBASE);
+
+        myFirebaseRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                Log.v("there are ", snapshot.getChildrenCount() + " children");
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    String newType = postSnapshot.child("type").getValue().toString();
+                    String newTask = postSnapshot.child("name").getValue().toString();
+
+                    if (newTask.equals(task.getName())) {
+                        Firebase refChild = myFirebaseRef.child("time");
+                        Map<String, String> post1 = new HashMap<String, String>();
+                        post1.put("Start", startTime);
+                        post1.put("End", endTime);
+                        refChild.push().setValue(post1);
+                        Log.v(startTime, endTime);
+
+                    }
+//                    if (!typeSet.contains(newType)) {
+//                        typeSet.add(newType);
+//                        typeSetObj.add(new Type(newType));
+//                        typeMap.put(newType, first.add(new Task(postSnapshot.child("name").getValue().toString())));
+//                    }
+
+                    Log.v(newType, "added");
+
+                }
+                updateAdapter();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+
+        Map<String, String> post1 = new HashMap<String, String>();
+        post1.put("name", addActivityName);
+        post1.put("type", addCategoryName);
+        myFirebaseRef.push().setValue(post1);
+        Log.v(addActivityName, addCategoryName);
+
     }
 }
